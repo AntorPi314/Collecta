@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#FFFFFF00</color>">
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFC107</color>
+
+    <color name="master_bg">#1D2733</color>
+    <color name="folderName">#8B97A2</color>
+    <color name="highLightLine">#64ADFF</color>
+
+    <color name="channelName">#E9EEF4</color>
+    <color name="channelDes">#7D8B99</color>
+
+    <color name="colorPrimary">#52B6CC</color>
+    <color name="colorPrimaryDark">#52B6CC</color>
+    <color name="colorAccent">#52B6CC</color>
+    <color name="colorControlHighlight">#52B6CC</color>
+    <color name="colorControlNormal">#52B6CC</color>
+</resources>
