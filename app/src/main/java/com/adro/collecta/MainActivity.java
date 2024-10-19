@@ -29,7 +29,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Adapter.OnItemActionListener {
     public Context context;
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.OnItemAct
 
     private RecyclerView recyclerView2;
     private AdapterChannel adapter2;
-    private List<ItemChannel> itemList2;
+    private List<ItemChannel> itemList2, itemList3;
     public SaveRecyclerView<ItemChannel> saveRecyclerViewData2;
 
     public int selectedFolder = 0, selectedChannel = 0;
@@ -58,17 +57,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.OnItemAct
         saveRecyclerViewData = new SaveRecyclerView<>();
         addImageListener();
 
-        itemList = loadData();
-        if (itemList == null) {
-            itemList = new ArrayList<>();
-            itemList.add(0, new Item("Home", "F0"));
-            saveData();
-        }
-        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        adapter = new Adapter(context, itemList, this);
-        recyclerView.setAdapter(adapter);
-        adapter.performClick(0);
-
         recyclerView2 = findViewById(R.id.channelRecyclerView);
         saveRecyclerViewData2 = new SaveRecyclerView<>();
 
@@ -81,34 +69,17 @@ public class MainActivity extends AppCompatActivity implements Adapter.OnItemAct
         recyclerView2.setLayoutManager(new LinearLayoutManager(context));
         adapter2 = new AdapterChannel(this, context, itemList2);
         recyclerView2.setAdapter(adapter2);
-    }
 
-    private void reloadChannelData() {
-        // Load data again
-        List<ItemChannel> newItemList = loadData2();
-
-        // Check if newItemList is null and initialize it if necessary
-        if (newItemList == null) {
-            newItemList = new ArrayList<>();
-            saveData2();
+        itemList = loadData();
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+            itemList.add(0, new Item("Home", "F0"));
+            saveData();
         }
-
-        // Clear the existing list and add the newly loaded items
-        itemList2.clear();
-        itemList2.addAll(newItemList);
-
-        // Notify the adapter about the updated data
-        adapter2.notifyDataSetChanged();
-    }
-
-    private void clearAndReloadData() {
-        itemList2.clear();
-        itemList2 = loadData2();
-        if (itemList2 == null) {
-            itemList2 = new ArrayList<>();
-            saveData2();
-        }
-        adapter2.notifyDataSetChanged();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new Adapter(context, itemList, this);
+        recyclerView.setAdapter(adapter);
+        adapter.performClick(0);
     }
 
     private void showDialogAddFolder() {
@@ -188,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements Adapter.OnItemAct
                         itemList.remove(position);
                         adapter.notifyItemRemoved(position);
                         saveData();
+                        saveRecyclerViewData2.clearData(context, itemList.get(position).getMs());
+                        itemList2.clear();
+                        adapter2.notifyDataSetChanged();
                         dialog.dismiss();
                         dialog2.dismiss();
                     }
@@ -462,28 +436,34 @@ public class MainActivity extends AppCompatActivity implements Adapter.OnItemAct
         saveRecyclerViewData.saveItems(context, "folder", itemList);
     }
 
+    public void Test(View view){
+        itemList2.clear();
+        itemList2.add(0, new ItemChannel("My Channel", "no description", "https://avatars.githubusercontent.com/u/123496530?s=96&v=4", "#FFFFFF", "#FFFFFF", "#000000", "C1", "user"));
+        adapter2.notifyDataSetChanged();
+    }
+
+    private void clearAndReloadData() {
+        itemList2.clear();
+        if (!saveRecyclerViewData2.isKeyExists(context, selectedFolderMS)) {
+            saveData2();
+        }
+        List<ItemChannel> loadedData = loadData2();
+        if (loadedData != null) {
+            itemList2.clear();
+            itemList2.addAll(loadedData);
+        }
+        adapter2.notifyDataSetChanged();
+    }
+
     @Override
     public void onItemClick(int position) {
         recyclerView.scrollToPosition(position);
-
-        /*List<ItemChannel> newItemList = loadData2();
-
-        if (newItemList == null) {
-            newItemList = new ArrayList<>();
-            saveData2();
-        }
-        itemList2.clear();
-        itemList2.addAll(newItemList);
-        adapter2.notifyDataSetChanged();*/
-
         updateSelectedInfo();
-        //reloadChannelData();
-        //clearAndReloadData();
+        clearAndReloadData();
     }
 
     @Override
     public void onItemHold(int position) {
-        //Toast.makeText(context, "You Hold", Toast.LENGTH_SHORT).show();
         showDialogUpdateFolder(position);
     }
 

@@ -43,6 +43,15 @@
                 android:paddingEnd="8dp"
                 android:src="@drawable/list_add" />
 
+            <ImageView
+                android:id="@+id/addImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:onClick="Test"
+                android:src="@drawable/error" />
+
 
         </LinearLayout>
 

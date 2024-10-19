@@ -34,6 +34,11 @@ public class SaveRecyclerView<T> {
         }
     }
 
+    public boolean isKeyExists(Context context, String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.contains(key);
+    }
+
     public void clearData(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
